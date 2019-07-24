@@ -1,9 +1,17 @@
 import { ReplyKeyboard } from 'node-telegram-keyboard-wrapper';
-import { START_QUESTIONS_COMMAND } from '../handlers/startQuestions';
+import { Texts } from '../texts';
+import { User } from '../db/entities/User';
+import { UserState } from '../types/UserState';
 
-export const StartKeyboard = new ReplyKeyboard();
+export function StartKeyboard(user: User) {
+    const keyboard = new ReplyKeyboard();
 
-StartKeyboard.addRow(
-    START_QUESTIONS_COMMAND,
-    'Онлайн вопросы',
-);
+    if (user.state !== UserState.Finished) {
+        keyboard.addRow(Texts.start_online_command);
+        keyboard.addRow(Texts.start_offline_command);
+    }
+    
+    keyboard.addRow(Texts.schedule_command);
+
+    return keyboard.open()
+}

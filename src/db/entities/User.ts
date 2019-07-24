@@ -30,6 +30,16 @@ export class User extends BaseEntity {
     @JoinColumn({ name: 'currentQuestionId' })
     public currentQuestion: Question;
 
+    @Column({ default: [] })
+    public answeredQuestions: number[];
+
+    @Column({ default: false })
+    public isActive: boolean;
+
+    public get isAnswering() {
+        return [UserState.AnsweringOnline, UserState.AnsweringOffline].includes(this.state);
+    }
+
     static async identify(msg: TelegramBot.Message) {
         let user = await User.findOne({ chatId: msg.chat.id });
 

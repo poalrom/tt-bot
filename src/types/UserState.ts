@@ -1,4 +1,6 @@
 export enum UserState {
     Initial = 0,
-    Answering = 1,
+    AnsweringOnline = 1,
+    AnsweringOffline = 2,
+    Finished = 3,
 }
