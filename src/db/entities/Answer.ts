@@ -16,6 +16,6 @@ export class Answer extends BaseEntity {
     public questionId: number;
 
     @ManyToOne((_type) => Question)
-    @JoinColumn({ name: 'questionId' })
+    @JoinColumn({ name: "questionId" })
     public question: Question;
 }

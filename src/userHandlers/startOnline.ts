@@ -1,8 +1,8 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { User } from '../db/entities/User';
-import { UserState } from '../types/UserState';
-import { Texts } from '../texts';
-import { QuizKeyboard } from '../keyboards/QuizKeyboard';
+import TelegramBot from "node-telegram-bot-api";
+import { User } from "../db/entities/User";
+import { UserState } from "../types/UserState";
+import { Texts } from "../texts";
+import { QuizKeyboard } from "../keyboards/QuizKeyboard";
 
 export async function startOnline(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
     if (user.state !== UserState.Finished) {

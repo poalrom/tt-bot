@@ -1,6 +1,6 @@
 import { ConnectionOptions } from "typeorm";
 
-export = {
+export const ormConfig = {
     type: "postgres",
     host: process.env.POSTGRES_HOST,
     port: Number(process.env.POSTGRES_PORT),

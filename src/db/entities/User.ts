@@ -1,5 +1,5 @@
 import { BaseEntity, Entity, PrimaryColumn, Column, OneToOne, JoinColumn } from "typeorm";
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot from "node-telegram-bot-api";
 import { UserState } from "../../types/UserState";
 import { Question } from "./Question";
 
@@ -27,11 +27,15 @@ export class User extends BaseEntity {
     public currentQuestionId: number;
 
     @OneToOne((_type) => Question)
-    @JoinColumn({ name: 'currentQuestionId' })
+    @JoinColumn({ name: "currentQuestionId" })
     public currentQuestion: Question;
 
-    @Column({ default: [] })
-    public answeredQuestions: number[];
+    /**
+     * Строка со списком ID вопросов, на которые уже ответил пользователь
+     * Разделитель - ","
+     */
+    @Column({ default: "" })
+    public answeredQuestionsIds: string;
 
     @Column({ default: false })
     public isActive: boolean;
