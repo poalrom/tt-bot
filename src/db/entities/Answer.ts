@@ -1,9 +1,9 @@
-import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Question } from "./Question";
 
 @Entity()
 export class Answer extends BaseEntity {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     public id: number;
 
     @Column()

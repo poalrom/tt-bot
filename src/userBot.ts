@@ -14,24 +14,29 @@ import { startOnline } from "./userHandlers/startOnline";
 import { startOffline } from "./userHandlers/startOffline";
 import { returnHandler } from "./userHandlers/returnHandler";
 import { schedule } from "./userHandlers/schedule";
+import { leaderboardHandler } from "./userHandlers/leaderboardHandler";
 
 const userRouter: IRouter = {
     [Texts.start_command]: start,
     [Texts.start_online_command]: startOnline,
     [Texts.start_offline_command]: startOffline,
+    [Texts.switch_to_online_command]: startOffline,
+    [Texts.switch_to_offline_command]: startOffline,
     [Texts.return_command]: returnHandler,
     [Texts.schedule_command]: schedule,
+    [Texts.leaderboard_command]: leaderboardHandler,
+    [Texts.next_question_command]: answerQuestion,
 };
 
 export function initUserBot() {
     const userBot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
-    userBot.on("polling_error", (e) => logger.error(e));
+    userBot.on("polling_error", (e) => logger.error(`userBot: ${e}`, e));
 
     userBot.on("message", async (msg) => {
         const user = await User.identify(msg);
 
-        logger.info(`Receive message ${msg.message_id}: "${msg.text}" from ${user.login}`);
+        logger.info(`userBot: Receive message ${msg.message_id}: "${msg.text}" from ${user.login}`, msg);
 
         if (msg.text in userRouter) {
             return await userRouter[msg.text](userBot, user, msg);
@@ -41,8 +46,8 @@ export function initUserBot() {
             return await answerQuestion(userBot, user, msg);
         }
 
-        await dummyHandler(userBot, user, msg);
+        return await dummyHandler(userBot, user, msg);
     });
 
-    logger.info("User bot started");
+    logger.info("userBot: User bot started");
 }

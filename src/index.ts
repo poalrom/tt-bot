@@ -1,12 +1,10 @@
 process.env.NTBA_FIX_319 = "1";
 
-import { createConnection } from "typeorm";
-
 import { logger } from "./logger";
-import { ormConfig } from "./ormconfig";
 import { initUserBot } from "./userBot";
+import { initDB } from "./db";
 
-createConnection(ormConfig)
+initDB()
     .then(() => {
         logger.info("Connected to DB. Starting bots");
 

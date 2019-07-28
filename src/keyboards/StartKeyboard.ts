@@ -11,6 +11,7 @@ export function StartKeyboard(user: User) {
         keyboard.addRow(Texts.start_offline_command);
     }
 
+    keyboard.addRow(Texts.leaderboard_command);
     keyboard.addRow(Texts.schedule_command);
 
     return keyboard.open();

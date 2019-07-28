@@ -37,15 +37,32 @@ export class User extends BaseEntity {
     @Column({ default: "" })
     public answeredQuestionsIds: string;
 
-    @Column({ default: false })
+    @Column({ default: true })
     public isActive: boolean;
 
     public get isAnswering() {
         return [UserState.AnsweringOnline, UserState.AnsweringOffline].includes(this.state);
     }
 
+    public addAnsweredId(id: number) {
+        if (this.answeredQuestionsIds.length) {
+            this.answeredQuestionsIds += `,${id}`;
+        } else {
+            this.answeredQuestionsIds = String(id);
+        }
+    }
+
+    public async resetState() {
+        if (this.isAnswering) {
+            this.state = UserState.Initial;
+            await this.save();
+        }
+    }
+
     static async identify(msg: TelegramBot.Message) {
-        let user = await User.findOne({ chatId: msg.chat.id });
+        let user = await User.findOne({
+            chatId: msg.chat.id,
+        });
 
         if (!user) {
             user = new User();

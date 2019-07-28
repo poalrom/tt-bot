@@ -1,6 +1,6 @@
-import { ConnectionOptions } from "typeorm";
+import { ConnectionOptions, createConnection, Connection } from "typeorm";
 
-export const ormConfig = {
+const ormConfig = {
     type: "postgres",
     host: process.env.POSTGRES_HOST,
     port: Number(process.env.POSTGRES_PORT),
@@ -17,3 +17,10 @@ export const ormConfig = {
         migrationsDir: "src/db/migrations"
     },
 } as ConnectionOptions;
+
+export let db: Connection;
+
+export function initDB() {
+    return createConnection(ormConfig)
+        .then((connection) => db = connection);
+}
