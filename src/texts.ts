@@ -24,4 +24,5 @@ export enum Texts {
     next_question_command = "Следующий вопрос",
     next_question_response = "Держи следующий вопрос",
     next_question_not_found = "Ой, кажется ты ответил на все вопросы. Аймаладец",
+    add_score = "Тебе добавлены баллы: {1}. Твой текущий счет: {2}",
 }

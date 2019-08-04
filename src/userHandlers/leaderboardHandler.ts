@@ -10,7 +10,7 @@ export async function leaderboardHandler(bot: TelegramBot, user: User, msg: Tele
     const positions = await db.query(`
         SELECT ${positionField} 
         FROM (
-            SELECT login, ROW_NUMBER() over(order by score) as ${positionField} FROM public.user
+            SELECT login, last_answer_timestamp, ROW_NUMBER() over(order by score DESC, last_answer_timestamp ASC) as ${positionField} FROM public.user
         ) result 
         WHERE login = '${user.login}';
     `);

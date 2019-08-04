@@ -18,6 +18,7 @@ export async function answerQuestion(bot: TelegramBot, user: User, msg: Telegram
         if (msg.text !== Texts.next_question_command) {
             if (currentQuestion.isRightAnswer(msg.text)) {
                 user.score++;
+                user.last_answer_timestamp = Date.now();
                 bot.sendMessage(msg.chat.id, Texts.right_answer);
             } else {
                 bot.sendMessage(msg.chat.id, Texts.wrong_answer);
@@ -56,7 +57,10 @@ export async function answerQuestion(bot: TelegramBot, user: User, msg: Telegram
 
     bot.sendMessage(
         msg.chat.id,
-        `${randomQuestion.text}\n Ответы: ${randomQuestion.getSortedAnswers().map((answer, i) => `${i+1}: ${answer.text}`).join(`\n`)}`,
-        QuizKeyboard(user, randomQuestion.answers)
+        `${randomQuestion.text}\n\nОтветы:\n${randomQuestion.getSortedAnswers().map((answer, i) => `*${i+1}*: ${answer.text}`).join(`\n`)}`,
+        {
+            ...QuizKeyboard(user, randomQuestion.answers),
+            parse_mode: 'Markdown',
+        }
     );
 }

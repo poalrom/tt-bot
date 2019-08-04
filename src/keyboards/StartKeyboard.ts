@@ -8,10 +8,14 @@ export function StartKeyboard(user: User) {
 
     if (user.state !== UserState.Finished) {
         keyboard.addRow(Texts.start_online_command);
-        keyboard.addRow(Texts.start_offline_command);
     }
 
     keyboard.addRow(Texts.leaderboard_command);
+
+    if (user.state !== UserState.Finished) {
+        keyboard.addRow(Texts.start_offline_command);
+    }
+
     keyboard.addRow(Texts.schedule_command);
 
     return keyboard.open();

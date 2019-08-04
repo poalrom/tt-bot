@@ -1,7 +1,6 @@
 import TelegramBot from "node-telegram-bot-api";
 
 import { UserState } from "./types/UserState";
-import { IRouter } from "./types/Router";
 
 import { User } from "./db/entities/User";
 import { logger } from "./logger";
@@ -15,8 +14,9 @@ import { startOffline } from "./userHandlers/startOffline";
 import { returnHandler } from "./userHandlers/returnHandler";
 import { schedule } from "./userHandlers/schedule";
 import { leaderboardHandler } from "./userHandlers/leaderboardHandler";
+import { IUserRouter, IAdminRouter } from "./types/Router";
 
-const userRouter: IRouter = {
+const userRouter: IUserRouter = {
     [Texts.start_command]: start,
     [Texts.start_online_command]: startOnline,
     [Texts.start_offline_command]: startOffline,
@@ -28,8 +28,10 @@ const userRouter: IRouter = {
     [Texts.next_question_command]: answerQuestion,
 };
 
+export let userBot: TelegramBot;
+
 export function initUserBot() {
-    const userBot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
+    userBot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
     userBot.on("polling_error", (e) => logger.error(`userBot: ${e}`, e));
 
@@ -38,7 +40,7 @@ export function initUserBot() {
 
         logger.info(`userBot: Receive message ${msg.message_id}: "${msg.text}" from ${user.login}`, msg);
 
-        if (msg.text in userRouter) {
+        if (userRouter.hasOwnProperty(msg.text)) {
             return await userRouter[msg.text](userBot, user, msg);
         }
 
@@ -46,7 +48,7 @@ export function initUserBot() {
             return await answerQuestion(userBot, user, msg);
         }
 
-        return await dummyHandler(userBot, user, msg);
+        return await dummyHandler(userBot, msg);
     });
 
     logger.info("userBot: User bot started");

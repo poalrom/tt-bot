@@ -30,6 +30,9 @@ export class User extends BaseEntity {
     @JoinColumn({ name: "currentQuestionId" })
     public currentQuestion: Question;
 
+    @Column({ type: 'bigint' })
+    public last_answer_timestamp: number;
+
     /**
      * Строка со списком ID вопросов, на которые уже ответил пользователь
      * Разделитель - ","
@@ -41,7 +44,7 @@ export class User extends BaseEntity {
     public isActive: boolean;
 
     public get isAnswering() {
-        return [UserState.AnsweringOnline, UserState.AnsweringOffline].includes(this.state);
+        return UserState.AnsweringOnline === this.state;
     }
 
     public addAnsweredId(id: number) {
@@ -70,6 +73,11 @@ export class User extends BaseEntity {
             user.login = msg.from.username;
             user.firstName = msg.from.first_name;
             user.lastName = msg.from.last_name;
+            user.last_answer_timestamp = Date.now();
+
+            await user.save();
+        } else if (!user.isActive) {
+            user.isActive = true;
 
             await user.save();
         }
