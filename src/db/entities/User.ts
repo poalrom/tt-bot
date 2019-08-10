@@ -1,6 +1,7 @@
-import { BaseEntity, Entity, PrimaryColumn, Column, OneToOne, JoinColumn } from "typeorm";
 import TelegramBot from "node-telegram-bot-api";
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 import { UserState } from "../../types/UserState";
+import { Answer } from "./Answer";
 import { Question } from "./Question";
 
 @Entity()
@@ -23,36 +24,38 @@ export class User extends BaseEntity {
     @Column({ default: 0 })
     score: number;
 
-    @Column({ nullable: true })
-    public currentQuestionId: number;
-
-    @OneToOne((_type) => Question)
-    @JoinColumn({ name: "currentQuestionId" })
-    public currentQuestion: Question;
+    @ManyToMany((_type) => Answer, answer => answer.users)
+    @JoinTable({ name: "user_answers" })
+    public answers: Answer[];
 
     @Column({ type: "bigint" })
     public last_answer_timestamp: number;
 
-    /**
-     * Строка со списком ID вопросов, на которые уже ответил пользователь
-     * Разделитель - ","
-     */
-    @Column({ default: "" })
-    public answeredQuestionsIds: string;
+    public getAnsweredQuestionsIds() {
+        if (!this.answers) {
+            return [];
+        }
+
+        return this.answers.reduce((acc, answer) => {
+            acc.push(String(answer.questionId));
+
+            return acc;
+        }, [] as string[]);
+    }
 
     @Column({ default: true })
     public isActive: boolean;
 
-    public get isAnswering() {
-        return UserState.AnsweringOnline === this.state;
+    public addAnswer(answer: Answer) {
+        if (this.answers) {
+            this.answers.push(answer);
+        } else {
+            this.answers = [answer];
+        }
     }
 
-    public addAnsweredId(id: number) {
-        if (this.answeredQuestionsIds.length) {
-            this.answeredQuestionsIds += `,${id}`;
-        } else {
-            this.answeredQuestionsIds = String(id);
-        }
+    public get isAnswering() {
+        return UserState.AnsweringOnline === this.state;
     }
 
     public async resetState() {
@@ -62,14 +65,16 @@ export class User extends BaseEntity {
         }
     }
 
-    static async identify(msg: TelegramBot.Message) {
+    static async identify(msg: TelegramBot.Message | TelegramBot.CallbackQuery) {
         let user = await User.findOne({
-            chatId: msg.chat.id,
+            chatId: msg.from.id,
+        }, {
+            relations: ["answers"],
         });
 
         if (!user) {
             user = new User();
-            user.chatId = msg.chat.id;
+            user.chatId = msg.from.id;
             user.login = msg.from.username;
             user.firstName = msg.from.first_name;
             user.lastName = msg.from.last_name;

@@ -1,11 +1,22 @@
-import TelegramBot from "node-telegram-bot-api";
-import { User } from "../db/entities/User";
-import { Texts } from "../texts";
+import { config } from "../config";
 import { Question } from "../db/entities/Question";
-import { QuizKeyboard } from "../keyboards/QuizKeyboard";
+import { User } from "../db/entities/User";
+import { UserKeyboard } from "../keyboards/UserKeyboard";
+import { Texts } from "../texts";
+import { UserState } from "../types/UserState";
+import { userBot } from "../userBot";
 
-export async function answerQuestion(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
-    const currentQuestion = user.currentQuestionId && await Question.findOne(user.currentQuestionId, {
+export async function answerQuestion(user: User, text: string) {
+    const [questionId, answerId] = text.split(" ");
+    const answeredQuestions = user.getAnsweredQuestionsIds();
+
+    if (answeredQuestions.includes(questionId)) {
+        userBot.sendMessage(user.chatId, Texts.already_answered);
+
+        return;
+    }
+
+    const currentQuestion = questionId && await Question.findOne(questionId, {
         join: {
             alias: "question",
             leftJoinAndSelect: {
@@ -14,53 +25,30 @@ export async function answerQuestion(bot: TelegramBot, user: User, msg: Telegram
         }
     });
 
-    if (currentQuestion) {
-        if (msg.text !== Texts.next_question_command) {
-            if (currentQuestion.isRightAnswer(msg.text)) {
-                user.score++;
-                user.last_answer_timestamp = Date.now();
-                bot.sendMessage(msg.chat.id, Texts.right_answer);
-            } else {
-                bot.sendMessage(msg.chat.id, Texts.wrong_answer);
-            }
-        }
-
-        user.addAnsweredId(currentQuestion.id);
+    if (!currentQuestion) {
+        throw Texts.wrong_callback;
     }
 
-    let randomQuestionQuery = Question.getRepository()
-        .createQueryBuilder("question")
-        .leftJoinAndSelect("question.answers", "answers")
-        .orderBy("RANDOM()");
+    const answer = currentQuestion.answers.find((a) => a.id === Number(answerId.replace(/\D/g, "")));
 
-    if (user.answeredQuestionsIds.length) {
-        randomQuestionQuery = randomQuestionQuery.where(`question.id NOT IN (${user.answeredQuestionsIds})`);
+    if (!answer) {
+        throw Texts.wrong_callback;
     }
 
-    const randomQuestion = await randomQuestionQuery.getOne();
+    user.addAnswer(answer);
 
-    console.log(randomQuestion);
-
-    if (!randomQuestion) {
-        user.currentQuestionId = undefined;
-        await user.save();
-
-        bot.sendMessage(msg.chat.id, Texts.next_question_not_found, QuizKeyboard(user));
-
-        return;
+    if (answer.isRight) {
+        user.score++;
+        user.last_answer_timestamp = Date.now();
+        userBot.sendMessage(user.chatId, Texts.right_answer);
     } else {
-        bot.sendMessage(msg.chat.id, Texts.next_question_response);
+        userBot.sendMessage(user.chatId, Texts.wrong_answer);
     }
 
-    user.currentQuestionId = randomQuestion.id;
-    await user.save();
+    if (user.score >= config.scoreForFinal) {
+        user.state = UserState.FinishedOnline;
+        userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
+    }
 
-    bot.sendMessage(
-        msg.chat.id,
-        `${randomQuestion.text}\n\nОтветы:\n${randomQuestion.getSortedAnswers().map((answer, i) => `*${i + 1}*: ${answer.text}`).join(`\n`)}`,
-        {
-            ...QuizKeyboard(user, randomQuestion.answers),
-            parse_mode: "Markdown",
-        }
-    );
+    await User.getRepository().save(user);
 }

@@ -1,8 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
-import { User } from "../db/entities/User";
 import { Admin } from "../db/entities/Admin";
-import { userBot } from "../userBot";
+import { User } from "../db/entities/User";
 import { Texts } from "../texts";
+import { userBot } from "../userBot";
 
 export async function addScoreCallback(bot: TelegramBot, admin: Admin, args: string) {
     const [login, score] = args.split(" ");

@@ -1,11 +1,11 @@
-import TelegramBot from "node-telegram-bot-api";
-import { User } from "../db/entities/User";
-import { Texts } from "../texts";
-import { StartKeyboard } from "../keyboards/StartKeyboard";
-import { db } from "../db";
 import { config } from "../config";
+import { db } from "../db";
+import { User } from "../db/entities/User";
+import { UserKeyboard } from "../keyboards/UserKeyboard";
+import { Texts } from "../texts";
+import { userBot } from "../userBot";
 
-export async function leaderboardHandler(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
+export async function leaderboardHandler(user: User) {
     const positionField = "pos";
     const positions = await db.query(`
         SELECT ${positionField}
@@ -25,5 +25,5 @@ export async function leaderboardHandler(bot: TelegramBot, user: User, msg: Tele
             Texts.finite_mode_not_completed.replace("{1}", String(config.scoreForFinal - user.score));
     }
 
-    bot.sendMessage(msg.chat.id, message, StartKeyboard(user));
+    userBot.sendMessage(user.chatId, message, UserKeyboard(user));
 }

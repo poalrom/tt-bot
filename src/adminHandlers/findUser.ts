@@ -1,32 +1,30 @@
-import TelegramBot from "node-telegram-bot-api";
-import { User } from "../db/entities/User";
-import { AdminCommands } from "./commands";
+import { adminBot } from "../adminBot";
 import { Admin } from "../db/entities/Admin";
+import { User } from "../db/entities/User";
 import { AdminUserKeyboard } from "../keyboards/AdminUserKeyboard";
+import { AdminCommands } from "./commands";
 
-export async function findUser(bot: TelegramBot, admin: Admin, msg: TelegramBot.Message) {
-    const login = msg.text.replace(new RegExp(`^\\${AdminCommands.FIND}`), "").trim();
-
-    console.log(login);
+export async function findUser(admin: Admin, text: string) {
+    const login = text.replace(new RegExp(`^\\${AdminCommands.FIND}`), "").trim();
 
     if (login.length > 0) {
         const user = await User.findOne({ login });
 
         if (!user) {
-            await bot.sendMessage(msg.chat.id, "Пользователь не найден");
+            await adminBot.sendMessage(admin.chatId, "Пользователь не найден");
 
             return;
         }
 
-        await bot.sendMessage(
-            msg.chat.id,
+        await adminBot.sendMessage(
+            admin.chatId,
             `Нашел ${user.firstName} ${user.lastName}(@${user.login}). Его счет: ${user.score}`,
             AdminUserKeyboard(admin, user),
         );
         admin.currentCommand = "";
     } else {
         admin.currentCommand = AdminCommands.FIND;
-        await bot.sendMessage(msg.chat.id, `Какого пользователя найти?`);
+        await adminBot.sendMessage(admin.chatId, `Какого пользователя найти?`);
     }
 
     await admin.save();

@@ -1,5 +1,5 @@
-import { BaseEntity, Entity, PrimaryColumn, Column, OneToOne, JoinColumn } from "typeorm";
 import TelegramBot from "node-telegram-bot-api";
+import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { config } from "../../config";
 
 @Entity()

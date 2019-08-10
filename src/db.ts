@@ -1,4 +1,4 @@
-import { ConnectionOptions, createConnection, Connection } from "typeorm";
+import { Connection, ConnectionOptions, createConnection } from "typeorm";
 
 export let db: Connection;
 

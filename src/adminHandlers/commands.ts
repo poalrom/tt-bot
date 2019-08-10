@@ -1,5 +1,5 @@
 export enum AdminCommands {
     ANNONCE = "/annonce",
     FIND = "/find",
-    ADD_SCORE = "/addScore",
+    CHANGE_USER_STATE = "/changeUserState",
 }

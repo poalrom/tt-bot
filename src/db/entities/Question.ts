@@ -1,4 +1,5 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { shuffle } from "../../utils/shuffle";
 import { Answer } from "./Answer";
 
 @Entity()
@@ -12,24 +13,13 @@ export class Question extends BaseEntity {
     @OneToMany((_type) => Answer, answer => answer.question)
     public answers: Answer[];
 
-    public isRightAnswer(answerNumber: string) {
-        const sortedAnswers = this.getSortedAnswers();
-        const answer = sortedAnswers[Number(answerNumber.replace(/\D/g, "")) - 1];
+    public isRightAnswer(answerId: string) {
+        const answer = this.answers.find((a) => a.id === Number(answerId.replace(/\D/g, "")));
 
         return answer && answer.isRight;
     }
 
-    public getSortedAnswers() {
-        return this.answers.sort((a, b) => {
-            if (a.id < b.id) {
-                return -1;
-            }
-
-            if (a.id > b.id) {
-                return 1;
-            }
-
-            return 0;
-        });
+    public getRandomSortedAnswers() {
+        return shuffle(this.answers);
     }
 }

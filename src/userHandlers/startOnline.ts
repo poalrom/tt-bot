@@ -1,20 +1,15 @@
-import TelegramBot from "node-telegram-bot-api";
 import { User } from "../db/entities/User";
-import { UserState } from "../types/UserState";
+import { UserKeyboard } from "../keyboards/UserKeyboard";
 import { Texts } from "../texts";
-import { QuizKeyboard } from "../keyboards/QuizKeyboard";
-import { answerQuestion } from "./answerQuestion";
+import { UserState } from "../types/UserState";
+import { userBot } from "../userBot";
 
-export async function startOnline(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
-    if (user.state !== UserState.Finished) {
-        user.currentQuestionId = undefined;
+export async function startOnline(user: User) {
+    if (user.state < UserState.FinishedOnline) {
         user.state = UserState.AnsweringOnline;
         await user.save();
-
-        bot.sendMessage(msg.chat.id, Texts.start_online_message, QuizKeyboard(user));
-
-        await answerQuestion(bot, user, msg);
+        userBot.sendMessage(user.chatId, Texts.start_online_message, UserKeyboard(user));
     } else {
-        bot.sendMessage(msg.chat.id, Texts.finished_quiz_message);
+        userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
     }
 }

@@ -11,7 +11,7 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "db-start": "docker run -d --name ttbot_db --env-file .env -p 5101:5432 --rm postgres",
     "db-stop": "docker kill ttbot_db",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "cli": "env-cmd npm run run-cli",
     "run-cli": "ts-node ./src/cli/index.ts"
   },

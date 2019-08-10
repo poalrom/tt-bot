@@ -2,23 +2,22 @@ import TelegramBot from "node-telegram-bot-api";
 
 import { logger } from "./logger";
 
-import { IAdminRouter, IAdminCallbackRouter } from "./types/Router";
-import { help } from "./adminHandlers/help";
 import { annonce } from "./adminHandlers/annonce";
-import { Admin } from "./db/entities/Admin";
-import { addScoreCallback } from "./adminCallbacks/addScoreCallback";
+import { changeUserState } from "./adminHandlers/changeUserState";
 import { AdminCommands } from "./adminHandlers/commands";
 import { findUser } from "./adminHandlers/findUser";
-import { addScore } from "./adminHandlers/addScore";
+import { help } from "./adminHandlers/help";
+import { Admin } from "./db/entities/Admin";
+import { IAdminRouter } from "./types/Router";
+import { getCallbackCommand } from "./utils/getCallbackCommand";
 
 const adminRouter: IAdminRouter = {
-    [AdminCommands.ADD_SCORE]: addScore,
     [AdminCommands.ANNONCE]: annonce,
     [AdminCommands.FIND]: findUser,
 };
 
-const adminCallbackRouter: IAdminCallbackRouter = {
-    "/addScore": addScoreCallback,
+const adminCallbackRouter: IAdminRouter = {
+    [AdminCommands.CHANGE_USER_STATE]: changeUserState
 };
 
 export let adminBot: TelegramBot;
@@ -37,48 +36,21 @@ export function initAdminBot() {
             return;
         }
 
-        const commandMatcher = query.data.match(/^(\/\S+) (.+)/);
-
-        if (!commandMatcher) {
-            return await adminBot.answerCallbackQuery(query.id, { text: "Unknown command" });
-        }
-
-        const [, command, args] = commandMatcher;
+        const { command, args } = getCallbackCommand(query);
 
         if (!adminCallbackRouter.hasOwnProperty(command)) {
             return await adminBot.answerCallbackQuery(query.id, { text: "Unknown command" });
         }
 
-        await adminCallbackRouter[command](adminBot, admin, args);
-
-        await adminBot.answerCallbackQuery(query.id, { text: "Done" });
-    });
-
-    adminBot.onText(/\/find (.+)/, async (msg) => {
-        const admin = await Admin.identify(msg);
-
-        if (!admin) {
-            adminBot.sendMessage(msg.chat.id, "У тебя нет доступа к этому боту. Сорян :(");
-
-            return;
+        try {
+            await adminCallbackRouter[command](admin, args);
+            await adminBot.answerCallbackQuery(query.id, { text: "Done" });
+        } catch (e) {
+            await adminBot.answerCallbackQuery(query.id, { text: e });
         }
-
-        findUser(adminBot, admin, msg);
     });
 
-    adminBot.onText(/\/annonce (.+)/, async (msg) => {
-        const admin = await Admin.identify(msg);
-
-        if (!admin) {
-            adminBot.sendMessage(msg.chat.id, "У тебя нет доступа к этому боту. Сорян :(");
-
-            return;
-        }
-
-        annonce(adminBot, admin, msg);
-    });
-
-    adminBot.onText(/.*/, async (msg) => {
+    adminBot.on("message", async (msg) => {
         const admin = await Admin.identify(msg);
         if (!admin) {
             adminBot.sendMessage(msg.chat.id, "У тебя нет доступа к этому боту. Сорян :(");
@@ -95,10 +67,10 @@ export function initAdminBot() {
         }
 
         if (currentRoute) {
-            return await adminRouter[currentRoute](adminBot, admin, msg);
+            return await adminRouter[currentRoute](admin, msg.text);
         }
 
-        return await help(adminBot, msg);
+        return await help(admin);
     });
 
     logger.info("adminBot: Admin bot started");

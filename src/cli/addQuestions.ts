@@ -1,6 +1,6 @@
 import { initDB } from "../db";
-import { Question } from "../db/entities/Question";
 import { Answer } from "../db/entities/Answer";
+import { Question } from "../db/entities/Question";
 
 export async function addQuestions() {
     await initDB();

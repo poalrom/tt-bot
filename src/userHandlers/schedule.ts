@@ -1,7 +1,7 @@
-import TelegramBot from "node-telegram-bot-api";
 import { User } from "../db/entities/User";
 import { Texts } from "../texts";
+import { userBot } from "../userBot";
 
-export async function schedule(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
-    bot.sendMessage(msg.chat.id, Texts.schedule_message);
+export async function schedule(user: User) {
+    userBot.sendMessage(user.chatId, Texts.schedule_message);
 }

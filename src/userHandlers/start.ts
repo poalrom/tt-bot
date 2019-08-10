@@ -1,13 +1,13 @@
-import TelegramBot from "node-telegram-bot-api";
-import { StartKeyboard } from "../keyboards/StartKeyboard";
 import { User } from "../db/entities/User";
+import { UserKeyboard } from "../keyboards/UserKeyboard";
 import { logger } from "../logger";
 import { Texts } from "../texts";
+import { userBot } from "../userBot";
 
-export async function start(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
-    logger.info(`start: Start session for ${user.login}`, msg);
+export async function start(user: User) {
+    logger.info(`start: Start session for ${user.login}`);
 
     await user.resetState();
 
-    bot.sendMessage(msg.chat.id, Texts.start_command_response, StartKeyboard(user));
+    userBot.sendMessage(user.chatId, Texts.start_command_response, UserKeyboard(user));
 }

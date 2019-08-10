@@ -1,12 +1,12 @@
-import TelegramBot from "node-telegram-bot-api";
+import { adminBot } from "../adminBot";
+import { Admin } from "../db/entities/Admin";
 import { User } from "../db/entities/User";
-import { AdminCommands } from "./commands";
 import { logger } from "../logger";
 import { userBot } from "../userBot";
-import { Admin } from "../db/entities/Admin";
+import { AdminCommands } from "./commands";
 
-export async function annonce(bot: TelegramBot, admin: Admin, msg: TelegramBot.Message) {
-    const annonceText = msg.text.replace(new RegExp(`^\\${AdminCommands.ANNONCE}`), "").trim();
+export async function annonce(admin: Admin, text: string = "") {
+    const annonceText = text.replace(new RegExp(`^\\${AdminCommands.ANNONCE}`), "").trim();
 
     if (annonceText.length > 0) {
         const activeUsers = await User.find({ isActive: true });
@@ -21,12 +21,12 @@ export async function annonce(bot: TelegramBot, admin: Admin, msg: TelegramBot.M
             }
         }));
 
-        await bot.sendMessage(msg.chat.id, `Сообщение отправлено ${sendedMessages} пользователям`);
+        await adminBot.sendMessage(admin.chatId, `Сообщение отправлено ${sendedMessages} пользователям`);
 
         admin.currentCommand = "";
     } else {
         admin.currentCommand = AdminCommands.ANNONCE;
-        await bot.sendMessage(msg.chat.id, `Какое сообщение вы хотите отправить?`);
+        await adminBot.sendMessage(admin.chatId, `Какое сообщение вы хотите отправить?`);
     }
 
     await admin.save();

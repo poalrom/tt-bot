@@ -1,31 +1,35 @@
 import TelegramBot from "node-telegram-bot-api";
 
-import { UserState } from "./types/UserState";
-
 import { User } from "./db/entities/User";
 import { logger } from "./logger";
 import { Texts } from "./texts";
 
-import { start } from "./userHandlers/start";
+import { Commands } from "./commands";
+import { IUserRouter } from "./types/Router";
 import { answerQuestion } from "./userHandlers/answerQuestion";
 import { dummyHandler } from "./userHandlers/dummyHandler";
-import { startOnline } from "./userHandlers/startOnline";
-import { startOffline } from "./userHandlers/startOffline";
-import { returnHandler } from "./userHandlers/returnHandler";
-import { schedule } from "./userHandlers/schedule";
 import { leaderboardHandler } from "./userHandlers/leaderboardHandler";
-import { IUserRouter, IAdminRouter } from "./types/Router";
+import { nextQuestion } from "./userHandlers/nextQuestion";
+import { onStandHandler } from "./userHandlers/onStandHandler";
+import { schedule } from "./userHandlers/schedule";
+import { start } from "./userHandlers/start";
+import { startOnline } from "./userHandlers/startOnline";
+import { getCallbackCommand } from "./utils/getCallbackCommand";
 
-const userRouter: IUserRouter = {
+const userMessageRouter: IUserRouter = {
+    // Commands
     [Texts.start_command]: start,
     [Texts.start_online_command]: startOnline,
-    [Texts.start_offline_command]: startOffline,
-    [Texts.switch_to_online_command]: startOffline,
-    [Texts.switch_to_offline_command]: startOffline,
-    [Texts.return_command]: returnHandler,
+    [Texts.next_question_command]: nextQuestion,
     [Texts.schedule_command]: schedule,
     [Texts.leaderboard_command]: leaderboardHandler,
-    [Texts.next_question_command]: answerQuestion,
+    [Texts.stand_command]: onStandHandler,
+};
+
+const userCallbackRouter: IUserRouter = {
+    // Callbacks
+    [Commands.answer_question_command]: answerQuestion,
+    [Commands.debate_vote_command]: answerQuestion,
 };
 
 export let userBot: TelegramBot;
@@ -40,15 +44,30 @@ export function initUserBot() {
 
         logger.info(`userBot: Receive message ${msg.message_id}: "${msg.text}" from ${user.login}`, msg);
 
-        if (userRouter.hasOwnProperty(msg.text)) {
-            return await userRouter[msg.text](userBot, user, msg);
+        if (userMessageRouter.hasOwnProperty(msg.text)) {
+            return await userMessageRouter[msg.text](user, msg.text);
         }
 
-        if (user.state === UserState.AnsweringOnline) {
-            return await answerQuestion(userBot, user, msg);
+        return await dummyHandler(user);
+    });
+
+    userBot.on("callback_query", async (query) => {
+        const user = await User.identify(query);
+
+        logger.info(`userBot: Receive callback ${query.id}: "${query.message.text}" from ${user.login}`, query);
+
+        const commandData = getCallbackCommand(query);
+
+        if (!commandData || !userCallbackRouter.hasOwnProperty(commandData.command)) {
+            return await userBot.answerCallbackQuery(query.id, { text: Texts.unknown_command_response });
         }
 
-        return await dummyHandler(userBot, msg);
+        try {
+            await userCallbackRouter[commandData.command](user, commandData.args);
+            await userBot.answerCallbackQuery(query.id, { text: Texts.success_callback_answer });
+        } catch (e) {
+            await userBot.answerCallbackQuery(query.id, { text: e });
+        }
     });
 
     logger.info("userBot: User bot started");

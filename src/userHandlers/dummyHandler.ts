@@ -1,6 +1,7 @@
-import TelegramBot from "node-telegram-bot-api";
+import { User } from "../db/entities/User";
 import { Texts } from "../texts";
+import { userBot } from "../userBot";
 
-export async function dummyHandler(bot: TelegramBot, msg: TelegramBot.Message) {
-    bot.sendMessage(msg.chat.id, Texts.unknown_command_response);
+export async function dummyHandler(user: User) {
+    userBot.sendMessage(user.chatId, Texts.unknown_command_response);
 }

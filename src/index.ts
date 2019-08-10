@@ -1,9 +1,9 @@
 process.env.NTBA_FIX_319 = "1";
 
+import { initAdminBot } from "./adminBot";
+import { initDB } from "./db";
 import { logger } from "./logger";
 import { initUserBot } from "./userBot";
-import { initDB } from "./db";
-import { initAdminBot } from "./adminBot";
 
 initDB()
     .then(() => {
