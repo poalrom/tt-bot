@@ -5,7 +5,7 @@ import { Admin } from "../db/entities/Admin";
 import { AdminUserKeyboard } from "../keyboards/AdminUserKeyboard";
 
 export async function findUser(bot: TelegramBot, admin: Admin, msg: TelegramBot.Message) {
-    const login = msg.text.replace(new RegExp(`^\\${AdminCommands.FIND}`), '').trim();
+    const login = msg.text.replace(new RegExp(`^\\${AdminCommands.FIND}`), "").trim();
 
     console.log(login);
 
@@ -13,7 +13,7 @@ export async function findUser(bot: TelegramBot, admin: Admin, msg: TelegramBot.
         const user = await User.findOne({ login });
 
         if (!user) {
-            await bot.sendMessage(msg.chat.id, 'Пользователь не найден');
+            await bot.sendMessage(msg.chat.id, "Пользователь не найден");
 
             return;
         }
@@ -23,7 +23,7 @@ export async function findUser(bot: TelegramBot, admin: Admin, msg: TelegramBot.
             `Нашел ${user.firstName} ${user.lastName}(@${user.login}). Его счет: ${user.score}`,
             AdminUserKeyboard(admin, user),
         );
-        admin.currentCommand = '';
+        admin.currentCommand = "";
     } else {
         admin.currentCommand = AdminCommands.FIND;
         await bot.sendMessage(msg.chat.id, `Какого пользователя найти?`);

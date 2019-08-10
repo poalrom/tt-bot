@@ -25,6 +25,6 @@ export async function addQuestions() {
 
         await Promise.all(answers.map(async a => await a.save()));
 
-        console.log(`Add question ${i}`)
+        console.log(`Add question ${i}`);
     }
 }

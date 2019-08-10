@@ -30,7 +30,7 @@ export class User extends BaseEntity {
     @JoinColumn({ name: "currentQuestionId" })
     public currentQuestion: Question;
 
-    @Column({ type: 'bigint' })
+    @Column({ type: "bigint" })
     public last_answer_timestamp: number;
 
     /**

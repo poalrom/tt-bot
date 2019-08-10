@@ -18,7 +18,7 @@ const adminRouter: IAdminRouter = {
 };
 
 const adminCallbackRouter: IAdminCallbackRouter = {
-    '/addScore': addScoreCallback,
+    "/addScore": addScoreCallback,
 };
 
 export let adminBot: TelegramBot;
@@ -28,13 +28,13 @@ export function initAdminBot() {
 
     adminBot.on("polling_error", (e) => logger.error(`adminBot: ${e}`, e));
 
-    adminBot.on('callback_query', async (query) => {
+    adminBot.on("callback_query", async (query) => {
         const admin = await Admin.identify(query);
 
         if (!admin) {
-            adminBot.sendMessage(query.from.id, 'У тебя нет доступа к этому боту. Сорян :(');
+            adminBot.sendMessage(query.from.id, "У тебя нет доступа к этому боту. Сорян :(");
 
-            return null;
+            return;
         }
 
         const commandMatcher = query.data.match(/^(\/\S+) (.+)/);
@@ -49,7 +49,7 @@ export function initAdminBot() {
             return await adminBot.answerCallbackQuery(query.id, { text: "Unknown command" });
         }
 
-        await adminCallbackRouter[command](adminBot, admin, args)
+        await adminCallbackRouter[command](adminBot, admin, args);
 
         await adminBot.answerCallbackQuery(query.id, { text: "Done" });
     });
@@ -58,9 +58,9 @@ export function initAdminBot() {
         const admin = await Admin.identify(msg);
 
         if (!admin) {
-            adminBot.sendMessage(msg.chat.id, 'У тебя нет доступа к этому боту. Сорян :(');
+            adminBot.sendMessage(msg.chat.id, "У тебя нет доступа к этому боту. Сорян :(");
 
-            return null;
+            return;
         }
 
         findUser(adminBot, admin, msg);
@@ -70,9 +70,9 @@ export function initAdminBot() {
         const admin = await Admin.identify(msg);
 
         if (!admin) {
-            adminBot.sendMessage(msg.chat.id, 'У тебя нет доступа к этому боту. Сорян :(');
+            adminBot.sendMessage(msg.chat.id, "У тебя нет доступа к этому боту. Сорян :(");
 
-            return null;
+            return;
         }
 
         annonce(adminBot, admin, msg);
@@ -81,9 +81,9 @@ export function initAdminBot() {
     adminBot.onText(/.*/, async (msg) => {
         const admin = await Admin.identify(msg);
         if (!admin) {
-            adminBot.sendMessage(msg.chat.id, 'У тебя нет доступа к этому боту. Сорян :(');
+            adminBot.sendMessage(msg.chat.id, "У тебя нет доступа к этому боту. Сорян :(");
 
-            return null;
+            return;
         }
 
         logger.info(`adminBot: Receive message ${msg.message_id}: "${msg.text}" from ${msg.from.username}`, msg);

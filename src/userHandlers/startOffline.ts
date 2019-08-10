@@ -20,7 +20,7 @@ export async function startOffline(bot: TelegramBot, user: User, msg: TelegramBo
                 `${user.firstName} ${user.lastName}(@${user.login}) пришел на стенд решать задачки`,
                 AdminUserKeyboard(admin, user)
             );
-        }))
+        }));
 
         bot.sendMessage(msg.chat.id, Texts.start_offline_message, StartKeyboard(user));
     } else {

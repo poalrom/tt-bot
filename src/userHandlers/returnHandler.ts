@@ -6,6 +6,6 @@ import { UserState } from "../types/UserState";
 
 export async function returnHandler(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
     await user.resetState();
-    
+
     bot.sendMessage(msg.chat.id, Texts.return_message, StartKeyboard(user));
 }

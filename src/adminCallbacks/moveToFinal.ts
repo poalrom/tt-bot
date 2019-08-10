@@ -13,7 +13,7 @@ export async function moveToFinal(bot: TelegramBot, admin: Admin, login: string)
     if (user.score < config.scoreForFinal) {
         user.score = config.scoreForFinal;
         user.last_answer_timestamp = Date.now();
-        
+
         await user.save();
     }
 }

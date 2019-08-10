@@ -29,12 +29,12 @@ export async function answerQuestion(bot: TelegramBot, user: User, msg: Telegram
     }
 
     let randomQuestionQuery = Question.getRepository()
-        .createQueryBuilder('question')
-        .leftJoinAndSelect('question.answers', 'answers')
-        .orderBy('RANDOM()');
+        .createQueryBuilder("question")
+        .leftJoinAndSelect("question.answers", "answers")
+        .orderBy("RANDOM()");
 
     if (user.answeredQuestionsIds.length) {
-        randomQuestionQuery = randomQuestionQuery.where(`question.id NOT IN (${user.answeredQuestionsIds})`)
+        randomQuestionQuery = randomQuestionQuery.where(`question.id NOT IN (${user.answeredQuestionsIds})`);
     }
 
     const randomQuestion = await randomQuestionQuery.getOne();
@@ -42,7 +42,7 @@ export async function answerQuestion(bot: TelegramBot, user: User, msg: Telegram
     console.log(randomQuestion);
 
     if (!randomQuestion) {
-        user.currentQuestionId = null;
+        user.currentQuestionId = undefined;
         await user.save();
 
         bot.sendMessage(msg.chat.id, Texts.next_question_not_found, QuizKeyboard(user));
@@ -57,10 +57,10 @@ export async function answerQuestion(bot: TelegramBot, user: User, msg: Telegram
 
     bot.sendMessage(
         msg.chat.id,
-        `${randomQuestion.text}\n\nОтветы:\n${randomQuestion.getSortedAnswers().map((answer, i) => `*${i+1}*: ${answer.text}`).join(`\n`)}`,
+        `${randomQuestion.text}\n\nОтветы:\n${randomQuestion.getSortedAnswers().map((answer, i) => `*${i + 1}*: ${answer.text}`).join(`\n`)}`,
         {
             ...QuizKeyboard(user, randomQuestion.answers),
-            parse_mode: 'Markdown',
+            parse_mode: "Markdown",
         }
     );
 }

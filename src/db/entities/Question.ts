@@ -14,7 +14,7 @@ export class Question extends BaseEntity {
 
     public isRightAnswer(answerNumber: string) {
         const sortedAnswers = this.getSortedAnswers();
-        const answer = sortedAnswers[Number(answerNumber.replace(/\D/g, '')) - 1];
+        const answer = sortedAnswers[Number(answerNumber.replace(/\D/g, "")) - 1];
 
         return answer && answer.isRight;
     }
@@ -30,6 +30,6 @@ export class Question extends BaseEntity {
             }
 
             return 0;
-        })
+        });
     }
 }

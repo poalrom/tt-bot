@@ -8,12 +8,12 @@ export function AdminUserKeyboard(admin: Admin, user: User, answers?: Answer[]) 
     const keyboard = new InlineKeyboard();
 
     keyboard.addRow({
-        text: 'Добавить баллов',
+        text: "Добавить баллов",
         callback_data: `/addScore ${user.login}`
     });
 
     keyboard.addRow({
-        text: 'Перевести во 2 этап',
+        text: "Перевести во 2 этап",
         callback_data: `/moveToFinal ${user.login}`
     });
 

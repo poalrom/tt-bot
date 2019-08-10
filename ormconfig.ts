@@ -14,4 +14,4 @@ module.exports = {
     cli: {
         migrationsDir: "./src/db/migrations"
     },
-}
+};

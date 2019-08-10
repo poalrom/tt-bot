@@ -10,7 +10,7 @@ export class Admin extends BaseEntity {
     @Column()
     public login: string;
 
-    @Column({ default: '' })
+    @Column({ default: "" })
     public currentCommand: string;
 
     static async identify(msg: TelegramBot.Message | TelegramBot.CallbackQuery) {
@@ -20,7 +20,7 @@ export class Admin extends BaseEntity {
 
         if (!admin) {
             if (!config.adminLogins.includes(msg.from.username)) {
-                return null;
+                return;
             }
             admin = new Admin();
             admin.chatId = msg.from.id;

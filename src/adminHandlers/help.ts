@@ -7,5 +7,5 @@ export async function help(bot: TelegramBot, msg: TelegramBot.Message) {
 *${AdminCommands.ANNONCE} {text}* - Отправить текст всем
 *${AdminCommands.ADD_SCORE} {login} {score}* - Добавить баллов участнику
 *${AdminCommands.FIND} {login}* - Найти участника
-    `, { parse_mode: 'Markdown' });
+    `, { parse_mode: "Markdown" });
 }

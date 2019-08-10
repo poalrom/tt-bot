@@ -3,7 +3,7 @@ process.env.NTBA_FIX_319 = "1";
 import { logger } from "./logger";
 import { initUserBot } from "./userBot";
 import { initDB } from "./db";
-import {initAdminBot} from './adminBot';
+import { initAdminBot } from "./adminBot";
 
 initDB()
     .then(() => {

@@ -8,7 +8,7 @@ export function QuizKeyboard(user: User, answers?: Answer[]) {
 
     if (user.isAnswering) {
         answers && keyboard.addRow(...answers.map((answer, i) => {
-            return String(i + 1) + (process.env.DEBUG && answer.isRight ? ' +' : '');
+            return String(i + 1) + (process.env.DEBUG && answer.isRight ? " +" : "");
         }));
         keyboard.addRow(Texts.next_question_command);
     }

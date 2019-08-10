@@ -7,7 +7,7 @@ import { answerQuestion } from "./answerQuestion";
 
 export async function startOnline(bot: TelegramBot, user: User, msg: TelegramBot.Message) {
     if (user.state !== UserState.Finished) {
-        user.currentQuestionId = null;
+        user.currentQuestionId = undefined;
         user.state = UserState.AnsweringOnline;
         await user.save();
 
