@@ -26,13 +26,13 @@ export async function answerQuestion(user: User, text: string) {
     });
 
     if (!currentQuestion) {
-        throw Texts.wrong_callback;
+        throw Texts.error;
     }
 
     const answer = currentQuestion.answers.find((a) => a.id === Number(answerId.replace(/\D/g, "")));
 
     if (!answer) {
-        throw Texts.wrong_callback;
+        throw Texts.error;
     }
 
     user.addAnswer(answer);

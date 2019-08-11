@@ -1,8 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
 import { UserState } from "../../types/UserState";
 import { Answer } from "./Answer";
-import { Question } from "./Question";
+import { DebateVote } from "./DebateVote";
 
 @Entity()
 export class User extends BaseEntity {
@@ -27,6 +27,9 @@ export class User extends BaseEntity {
     @ManyToMany((_type) => Answer, answer => answer.users)
     @JoinTable({ name: "user_answers" })
     public answers: Answer[];
+
+    @OneToMany((_type) => DebateVote, dv => dv.user)
+    public votes: DebateVote[];
 
     @Column({ type: "bigint" })
     public last_answer_timestamp: number;

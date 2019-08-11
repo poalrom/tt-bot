@@ -7,6 +7,8 @@ import { changeUserState } from "./adminHandlers/changeUserState";
 import { AdminCommands } from "./adminHandlers/commands";
 import { findUser } from "./adminHandlers/findUser";
 import { help } from "./adminHandlers/help";
+import { startDebate } from "./adminHandlers/startDebate";
+import { stopDebate } from "./adminHandlers/stopDebate";
 import { Admin } from "./db/entities/Admin";
 import { IAdminRouter } from "./types/Router";
 import { getCallbackCommand } from "./utils/getCallbackCommand";
@@ -14,6 +16,8 @@ import { getCallbackCommand } from "./utils/getCallbackCommand";
 const adminRouter: IAdminRouter = {
     [AdminCommands.ANNONCE]: annonce,
     [AdminCommands.FIND]: findUser,
+    [AdminCommands.START_DEBATE]: startDebate,
+    [AdminCommands.STOP_DEBATE]: stopDebate,
 };
 
 const adminCallbackRouter: IAdminRouter = {
@@ -62,9 +66,11 @@ export function initAdminBot() {
 
         let currentRoute = Object.keys(adminRouter).find((route) => admin.currentCommand.match(route));
 
-        if (!currentRoute) {
-            currentRoute = Object.keys(adminRouter).find((route) => msg.text.match(route));
+        if (currentRoute) {
+            return await adminRouter[currentRoute](admin, admin.currentCommand, msg.text);
         }
+
+        currentRoute = Object.keys(adminRouter).find((route) => msg.text.match(route));
 
         if (currentRoute) {
             return await adminRouter[currentRoute](admin, msg.text);

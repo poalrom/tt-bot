@@ -13,6 +13,7 @@ export const Texts = {
     schedule_command: "Расписание стенда",
     leaderboard_command: "Leaderboard",
     next_question_command: "Следующий вопрос",
+    stand_command: "Я на стенде",
 
     // Фразы бота
     unknown_command_response: "Прости, я не понимаю тебя. Попробуй снова =)",
@@ -27,7 +28,14 @@ export const Texts = {
     next_question_response: "Держи следующий вопрос",
     next_question_not_found: "Ой, кажется ты ответил на все вопросы. Аймаладец",
     already_answered: "Ты уже отвечал на этот вопрос",
-    stand_command: "Я на стенде",
+    debate_start_message: `Дебаты #{1} начались
+Тема: "{2}"
+
+За: {3}
+Против: {4}
+
+Голосуй кнопками под сообщением!`,
+    vote_success: "Твой голос принят",
 
     // Отбивки о завершении этапа
     [`state_to_${UserState.ReceivedOnlineGift}`]: "Ты получил подарок за викторину",
@@ -38,5 +46,5 @@ export const Texts = {
 
     // Ответы на коллбеки, отображаются сверху при нажатии на кнопку клавиатуры под сообщением
     success_callback_answer: "Done!",
-    wrong_callback: "Что-то пошло не так",
+    error: "Что-то пошло не так",
 };

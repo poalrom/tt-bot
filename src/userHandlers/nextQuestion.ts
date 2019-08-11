@@ -15,7 +15,7 @@ export async function nextQuestion(user: User, text: string) {
 
     const [questionId, answerId] = text.split(" ");
     if (!questionId || !answerId) {
-        throw Texts.wrong_callback;
+        throw Texts.error;
     }
 
     let randomQuestionQuery = Question.getRepository()

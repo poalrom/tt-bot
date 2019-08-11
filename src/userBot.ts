@@ -14,6 +14,7 @@ import { onStandHandler } from "./userHandlers/onStandHandler";
 import { schedule } from "./userHandlers/schedule";
 import { start } from "./userHandlers/start";
 import { startOnline } from "./userHandlers/startOnline";
+import { vote } from "./userHandlers/vote";
 import { getCallbackCommand } from "./utils/getCallbackCommand";
 
 const userMessageRouter: IUserRouter = {
@@ -29,7 +30,7 @@ const userMessageRouter: IUserRouter = {
 const userCallbackRouter: IUserRouter = {
     // Callbacks
     [Commands.answer_question_command]: answerQuestion,
-    [Commands.debate_vote_command]: answerQuestion,
+    [Commands.debate_vote_command]: vote,
 };
 
 export let userBot: TelegramBot;
