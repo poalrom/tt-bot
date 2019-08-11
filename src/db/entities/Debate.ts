@@ -17,7 +17,7 @@ export class Debate extends BaseEntity {
     public opponent: string;
 
     @OneToMany((_type) => DebateVote, dv => dv.debate)
-    public votes: Debate[];
+    public votes: DebateVote[];
 
     @Column({ default: false })
     public isActive: boolean;

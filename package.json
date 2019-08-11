@@ -5,7 +5,8 @@
   "main": "build/index.js",
   "scripts": {
     "dev": "env-cmd nodemon",
-    "dev-server": "ts-node --files ./src/index.ts",
+    "dev-server": "ts-node --files ./src/bot.ts",
+    "app": "ts-node --files ./src/app.ts",
     "build": "tsc",
     "test": "exit 0",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
@@ -19,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "env-cmd": "^9.0.3",
+    "express": "^4.17.1",
     "node-telegram-bot-api": "^0.30.0",
     "node-telegram-keyboard-wrapper": "^2.0.1",
     "nodemon": "^1.19.1",
@@ -35,7 +37,7 @@
       "src"
     ],
     "ext": "ts,json",
-    "exec": "npm run dev-server"
+    "exec": "npm run dev-server | npm run app"
   },
   "devDependencies": {
     "@types/express": "^4.17.0",

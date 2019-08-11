@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BEM</title>
+    <style>
+        html,
+        body,
+        .result {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            display: flex;
+            font-family: sans-serif;
+            color: #fff;
+            font-size: 40px;
+        }
+
+        .defender,
+        .opponent {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: width 1s;
+            min-width: 10%;
+        }
+
+        .defender {
+            background-color: green;
+        }
+
+        .opponent {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="result">
+        <div class="defender">
+            <div class="value">50%</div>
+        </div>
+        <div class="opponent">
+            <div class="value">50%</div>
+        </div>
+    </div>
+
+    <script>
+        function fetchStats() {
+            fetch('/stats')
+                .then(res => res.json())
+                .then(({ defender, opponent, sum }) => {
+                    if (typeof defender === 'undefined') {
+                        return;
+                    }
+                    const defenderEl = document.querySelector('.defender');
+                    const opponentEl = document.querySelector('.opponent');
+                    const defenderPercent = Math.floor(defender / sum * 100);
+
+                    defenderEl.style.width = `${defenderPercent}%`;
+                    defenderEl.querySelector('.value').innerText = `${defenderPercent}%`;
+                    opponentEl.style.width = `${100 - defenderPercent}%`;
+                    opponentEl.querySelector('.value').innerText = `${100 - defenderPercent}%`;
+                })
+        }
+
+        setInterval(fetchStats, 3000);
+    </script>
+</body>
+
+</html>
