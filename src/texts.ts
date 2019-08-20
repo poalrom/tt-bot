@@ -6,10 +6,10 @@ export const Texts = {
     // Это можно менять
 
     // Ответ на стартовую команду
-    start_command_response: "Привет от BEM бота. Stay BEMed",
+    start_command_response: "Привет от БЭМ-бота. Stay BEMed",
 
     // Надписи на кнопках нижней клавиатуры
-    start_online_command: "Начать онлайн викторину",
+    start_online_command: "Начать онлайн-викторину",
     schedule_command: "Расписание стенда",
     leaderboard_command: "Leaderboard",
     next_question_command: "Следующий вопрос",
@@ -17,12 +17,12 @@ export const Texts = {
 
     // Фразы бота
     unknown_command_response: "Прости, я не понимаю тебя. Попробуй снова =)",
-    start_online_message: "Начинаем онлайн викторину",
-    finished_quiz_message: "Поздравляем, ты прошел онлайн этап. Приходи на стенд за своим призом",
-    schedule_message: "Держи расписание",
+    start_online_message: "Начинаем онлайн-викторину",
+    finished_quiz_message: "Поздравляю, ты прошел онлайн-этап. Загляни на БЭМ-стенд, тебе выдадут приз или предложат принять участие во втором туре викторины.",
+    schedule_message: "Суббота Весь день // БЭМ-викторина, 11:00 // БЭМ-дебаты. Первый раунд, 14:00 // БЭМ-дебаты. Второй раун Воскресенье Весь день // БЭМ-викторина, 11:30 // БЭМ-дебаты. Третий раунд, 13:30 // Финал викторины",
     leaderboard_command_response: "Ты {1} в списке лидеров. У тебя {2} правильных ответов",
-    finite_mode_completed: "Ты закончил онлайн этап",
-    finite_mode_not_completed: "До окончания онлайн этапа правильно ответь на {1} вопросов",
+    finite_mode_completed: "Ты закончил онлайн-этап, подходи на БЭМ-стенд, там дадут приз или позовут принять участие во втором туре игры.",
+    finite_mode_not_completed: "До окончания онлайн-этапа правильно ответь на {1} вопросов",
     right_answer: "Ответ правильный =)",
     wrong_answer: "Ответ неправильный =(",
     next_question_response: "Держи следующий вопрос",
@@ -38,11 +38,11 @@ export const Texts = {
     vote_success: "Твой голос принят",
 
     // Отбивки о завершении этапа
-    [`state_to_${UserState.ReceivedOnlineGift}`]: "Ты получил подарок за викторину",
-    [`state_to_${UserState.ReceivedOfflineGift}`]: "Ты получил подарок за оффлайн",
-    [`state_to_${UserState.ReceivedFinalGift}`]: "Ты получил подарок за финал. Аймаладец",
-    [`state_to_${UserState.MovedToOffline}`]: "Ты прошел в оффлайн этап",
-    [`state_to_${UserState.MovedToFinal}`]: "Ты прошел в финал. Аймаладец",
+    [`state_to_${UserState.ReceivedOnlineGift}`]: "Подарок у тебя, а ты молодец. Приходи к нам на дебаты и не пропусти финал викторины. Должно быть весело.",
+    [`state_to_${UserState.ReceivedOfflineGift}`]: "Ты получил подарок за второй тур. Круто! Заглядывай на дебаты",
+    [`state_to_${UserState.ReceivedFinalGift}`]: "Ура! Ты победитель финала. Этим можно гордиться.",
+    [`state_to_${UserState.MovedToOffline}`]: "Ты прошел во второй этап. Если ты ещё не на стенде, смело иди туда и покажи это сообщение.",
+    [`state_to_${UserState.MovedToFinal}`]: "Ты прошел в финал. Ждём тебя на стенде в воскресенье в 13:30. Яндекс.Станция и ибрисы уже заготовлены",
 
     // Ответы на коллбеки, отображаются сверху при нажатии на кнопку клавиатуры под сообщением
     success_callback_answer: "Done!",
