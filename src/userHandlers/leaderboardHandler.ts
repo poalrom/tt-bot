@@ -3,6 +3,7 @@ import { db } from "../db";
 import { User } from "../db/entities/User";
 import { UserKeyboard } from "../keyboards/UserKeyboard";
 import { Texts } from "../texts";
+import { UserState } from "../types/UserState";
 import { userBot } from "../userBot";
 
 export async function leaderboardHandler(user: User) {
@@ -18,7 +19,7 @@ export async function leaderboardHandler(user: User) {
 
     let message = Texts.leaderboard_command_response.replace("{1}", userPosition).replace("{2}", String(user.score));
 
-    if (!config.infiniteMod) {
+    if (!config.infiniteMod && user.state === UserState.FinishedOnline) {
         message += `\n`;
         message += user.score >= config.scoreForFinal ?
             Texts.finite_mode_completed :
