@@ -25,5 +25,5 @@ export async function leaderboardHandler(user: User) {
             Texts.finite_mode_not_completed.replace("{1}", String(config.scoreForFinal - user.score));
     }
 
-    userBot.sendMessage(user.chatId, message, UserKeyboard(user));
+    await userBot.sendMessage(user.chatId, message, UserKeyboard(user));
 }

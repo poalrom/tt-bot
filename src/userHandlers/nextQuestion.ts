@@ -8,7 +8,7 @@ import { userBot } from "../userBot";
 
 export async function nextQuestion(user: User) {
     if (user.state >= UserState.FinishedOnline) {
-        userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
+        await userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
 
         return;
     }
@@ -29,17 +29,17 @@ export async function nextQuestion(user: User) {
     if (!randomQuestion) {
         await user.save();
 
-        userBot.sendMessage(user.chatId, Texts.next_question_not_found, UserKeyboard(user));
+        await userBot.sendMessage(user.chatId, Texts.next_question_not_found, UserKeyboard(user));
 
         return;
     }
 
-    userBot.sendMessage(user.chatId, Texts.next_question_response);
+    await userBot.sendMessage(user.chatId, Texts.next_question_response);
     await user.save();
 
     const answers = randomQuestion.getRandomSortedAnswers();
 
-    userBot.sendMessage(
+    await userBot.sendMessage(
         user.chatId,
         `${randomQuestion.text}\n\nОтветы:\n${answers.map((answer, i) => `*${i + 1}*: ${answer.text}`).join(`\n`)}`,
         {

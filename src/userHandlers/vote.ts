@@ -31,5 +31,5 @@ export async function vote(user: User, text: string) {
         await vote.save();
     }
 
-    userBot.sendMessage(user.chatId, Texts.vote_success, UserKeyboard(user));
+    await userBot.sendMessage(user.chatId, Texts.vote_success, UserKeyboard(user));
 }

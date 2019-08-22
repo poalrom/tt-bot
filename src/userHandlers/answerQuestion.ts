@@ -12,7 +12,7 @@ export async function answerQuestion(user: User, text: string) {
     const answeredQuestions = user.getAnsweredQuestionsIds();
 
     if (answeredQuestions.includes(questionId)) {
-        userBot.sendMessage(user.chatId, Texts.already_answered);
+        await userBot.sendMessage(user.chatId, Texts.already_answered);
 
         return;
     }
@@ -41,14 +41,14 @@ export async function answerQuestion(user: User, text: string) {
     if (answer.isRight) {
         user.score++;
         user.last_answer_timestamp = Date.now();
-        userBot.sendMessage(user.chatId, Texts.right_answer);
+        await userBot.sendMessage(user.chatId, Texts.right_answer);
     } else {
-        userBot.sendMessage(user.chatId, Texts.wrong_answer);
+        await userBot.sendMessage(user.chatId, Texts.wrong_answer);
     }
 
     if (user.score >= config.scoreForFinal) {
         user.state = UserState.FinishedOnline;
-        userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
+        await userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
     } else {
         await nextQuestion(user);
     }

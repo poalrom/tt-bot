@@ -3,5 +3,5 @@ import { Texts } from "../texts";
 import { userBot } from "../userBot";
 
 export async function dummyHandler(user: User) {
-    userBot.sendMessage(user.chatId, Texts.unknown_command_response);
+    await userBot.sendMessage(user.chatId, Texts.unknown_command_response);
 }

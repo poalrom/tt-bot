@@ -9,5 +9,5 @@ export async function start(user: User) {
 
     await user.resetState();
 
-    userBot.sendMessage(user.chatId, Texts.start_command_response, UserKeyboard(user));
+    await userBot.sendMessage(user.chatId, Texts.start_command_response, UserKeyboard(user));
 }
