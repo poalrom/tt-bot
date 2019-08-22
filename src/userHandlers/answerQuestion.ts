@@ -5,6 +5,7 @@ import { UserKeyboard } from "../keyboards/UserKeyboard";
 import { Texts } from "../texts";
 import { UserState } from "../types/UserState";
 import { userBot } from "../userBot";
+import { nextQuestion } from "./nextQuestion";
 
 export async function answerQuestion(user: User, text: string) {
     const [questionId, answerId] = text.split(" ");
@@ -48,6 +49,8 @@ export async function answerQuestion(user: User, text: string) {
     if (user.score >= config.scoreForFinal) {
         user.state = UserState.FinishedOnline;
         userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
+    } else {
+        await nextQuestion(user);
     }
 
     await User.getRepository().save(user);
