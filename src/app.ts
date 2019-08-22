@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 import express from "express";
 
 import { stats } from "./appHandlers/stats";

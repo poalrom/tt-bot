@@ -12,6 +12,6 @@
         "outDir": "dist"
     },
     "include": [
-        "src/**/*", "ormconfig.ts"
+        "src/**/*", "./ormconfig.ts"
     ]
 }

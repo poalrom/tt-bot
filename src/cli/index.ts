@@ -1,4 +1,8 @@
+import { config } from "dotenv";
+
 import { addQuestions } from "./addQuestions";
+
+config();
 
 const commands: Record<string, () => Promise<void>> = {
     "add-questions": addQuestions

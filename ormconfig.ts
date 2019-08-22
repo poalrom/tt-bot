@@ -1,4 +1,4 @@
-module.exports = {
+export const config = {
     type: "postgres",
     host: process.env.POSTGRES_HOST,
     port: Number(process.env.POSTGRES_PORT),
@@ -15,3 +15,5 @@ module.exports = {
         migrationsDir: "./src/db/migrations"
     },
 };
+
+module.exports = config;
