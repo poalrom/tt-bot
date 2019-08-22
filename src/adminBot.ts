@@ -67,7 +67,7 @@ export function initAdminBot() {
         let currentRoute = Object.keys(adminRouter).find((route) => admin.currentCommand.match(route));
 
         if (currentRoute) {
-            return await adminRouter[currentRoute](admin, admin.currentCommand, msg.text);
+            return await adminRouter[currentRoute](admin, msg.text);
         }
 
         currentRoute = Object.keys(adminRouter).find((route) => msg.text.match(route));
