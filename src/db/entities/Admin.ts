@@ -1,6 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { config } from "../../config";
+import { logger } from "../../logger";
 
 @Entity()
 export class Admin extends BaseEntity {
@@ -20,6 +21,8 @@ export class Admin extends BaseEntity {
 
         if (!admin) {
             if (!config.adminLogins.includes(msg.from.username)) {
+                logger.info(`User ${msg.from.username} try to become an admin`);
+
                 return;
             }
             admin = new Admin();

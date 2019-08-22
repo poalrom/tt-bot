@@ -37,7 +37,7 @@
       "src"
     ],
     "ext": "ts,json",
-    "exec": "npm run dev-server | npm run app"
+    "exec": "npm run dev-server"
   },
   "devDependencies": {
     "@types/express": "^4.17.0",

@@ -6,16 +6,11 @@ import { Texts } from "../texts";
 import { UserState } from "../types/UserState";
 import { userBot } from "../userBot";
 
-export async function nextQuestion(user: User, text: string) {
+export async function nextQuestion(user: User) {
     if (user.state >= UserState.FinishedOnline) {
         userBot.sendMessage(user.chatId, Texts.finished_quiz_message, UserKeyboard(user));
 
         return;
-    }
-
-    const [questionId, answerId] = text.split(" ");
-    if (!questionId || !answerId) {
-        throw Texts.error;
     }
 
     let randomQuestionQuery = Question.getRepository()

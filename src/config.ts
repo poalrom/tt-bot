@@ -2,6 +2,14 @@ export const config = {
     infiniteMod: false,
     scoreForFinal: 5,
     adminLogins: [
-        "Banfree",
+        "poalrom",
+        "savchkova",
+        "yaroshevich",
+        "vithar",
+        "xoxulin",
+        "ivoronin",
+        "Ermakoy",
+        "veged",
+        "tadatuta",
     ],
 };
