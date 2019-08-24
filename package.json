@@ -37,7 +37,7 @@
       "src"
     ],
     "ext": "ts,json",
-    "exec": "npm-run-all --parallel dev:*"
+    "exec": "npm run dev:bot"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",

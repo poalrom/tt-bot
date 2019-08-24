@@ -88,6 +88,23 @@ export class User extends BaseEntity {
             user.isActive = true;
 
             await user.save();
+        } else {
+            let changed = false;
+            if (user.login !== msg.from.username) {
+                user.login = msg.from.username || "";
+                changed = true;
+            }
+            if (user.firstName !== msg.from.first_name) {
+                user.firstName = msg.from.first_name || "";
+                changed = true;
+            }
+            if (user.lastName !== msg.from.last_name) {
+                user.lastName = msg.from.last_name || "";
+                changed = true;
+            }
+            if (changed) {
+                await user.save();
+            }
         }
 
         return user;
