@@ -12,10 +12,10 @@ export class User extends BaseEntity {
     @Column()
     public login: string;
 
-    @Column()
+    @Column({default: ""})
     public firstName: string;
 
-    @Column()
+    @Column({default: ""})
     public lastName: string;
 
     @Column({ default: UserState.Initial })
