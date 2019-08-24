@@ -67,13 +67,27 @@ export function initAdminBot() {
         let currentRoute = Object.keys(adminRouter).find((route) => admin.currentCommand.match(route));
 
         if (currentRoute) {
-            return await adminRouter[currentRoute](admin, msg.text);
+            try {
+                return await adminRouter[currentRoute](admin, msg.text);
+            } catch (error) {
+                admin.currentCommand = "";
+                await admin.save();
+
+                return await adminBot.sendMessage(admin.chatId, "Что-то пошло не так");
+            }
         }
 
         currentRoute = Object.keys(adminRouter).find((route) => msg.text.match(route));
 
         if (currentRoute) {
-            return await adminRouter[currentRoute](admin, msg.text);
+            try {
+                return await adminRouter[currentRoute](admin, msg.text);
+            } catch (error) {
+                admin.currentCommand = "";
+                await admin.save();
+
+                return await adminBot.sendMessage(admin.chatId, "Что-то пошло не так");
+            }
         }
 
         return await help(admin);

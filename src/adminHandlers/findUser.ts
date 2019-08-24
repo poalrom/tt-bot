@@ -11,6 +11,8 @@ export async function findUser(admin: Admin, text: string) {
         const user = await User.findOne({ login });
 
         if (!user) {
+            admin.currentCommand = "";
+            await admin.save();
             await adminBot.sendMessage(admin.chatId, "Пользователь не найден");
 
             return;

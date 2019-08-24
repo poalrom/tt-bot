@@ -46,7 +46,11 @@ export function initUserBot() {
         logger.info(`userBot: Receive message ${msg.message_id}: "${msg.text}" from ${user.login}`, msg);
 
         if (userMessageRouter.hasOwnProperty(msg.text)) {
-            return await userMessageRouter[msg.text](user, msg.text);
+            try {
+                return await userMessageRouter[msg.text](user, msg.text);
+            } catch (e) {
+                return await dummyHandler(user);
+            }
         }
 
         return await dummyHandler(user);
@@ -60,7 +64,14 @@ export function initUserBot() {
         const commandData = getCallbackCommand(query);
 
         if (!commandData || !userCallbackRouter.hasOwnProperty(commandData.command)) {
-            return await userBot.answerCallbackQuery(query.id, { text: Texts.unknown_command_response });
+            try {
+                return await userBot.answerCallbackQuery(
+                    query.id,
+                    { text: Texts.unknown_command_response }
+                );
+            } catch (e) {
+                return await userBot.answerCallbackQuery(query.id, { text: e });
+            }
         }
 
         try {
