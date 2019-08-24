@@ -17,5 +17,5 @@ export async function changeUserState(admin: Admin, text: string) {
     await user.save();
 
     userBot.sendMessage(user.chatId, Texts[`state_to_${state}`], UserKeyboard(user));
-    await findUser(admin, `/findUser ${user.login}`);
+    await findUser(admin, `/find ${user.login}`);
 }
