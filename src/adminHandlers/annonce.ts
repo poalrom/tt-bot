@@ -5,8 +5,8 @@ import { logger } from "../logger";
 import { userBot } from "../userBot";
 import { AdminCommands } from "./commands";
 
-export async function annonce(admin: Admin, text: string = "") {
-    const annonceText = text.replace(new RegExp(`^\\${AdminCommands.ANNONCE}`), "").trim();
+export async function annonce(admin: Admin, text: string = "", args?: string) {
+    const annonceText = args || text.replace(new RegExp(`^\\${AdminCommands.ANNONCE}`), "").trim();
 
     if (annonceText.length > 0) {
         const activeUsers = await User.find({ isActive: true });

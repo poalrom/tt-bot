@@ -4,8 +4,8 @@ import { User } from "../db/entities/User";
 import { AdminUserKeyboard } from "../keyboards/AdminUserKeyboard";
 import { AdminCommands } from "./commands";
 
-export async function findUser(admin: Admin, text: string) {
-    const login = text.replace(new RegExp(`^\\${AdminCommands.FIND}`), "").trim();
+export async function findUser(admin: Admin, text: string, args?: string) {
+    const login = args || text.replace(new RegExp(`^\\${AdminCommands.FIND}`), "").trim();
 
     if (login.length > 0) {
         const user = await User.findOne({ login });
