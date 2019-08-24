@@ -3,6 +3,7 @@ import { User } from "../db/entities/User";
 import { UserKeyboard } from "../keyboards/UserKeyboard";
 import { Texts } from "../texts";
 import { userBot } from "../userBot";
+import { findUser } from "./findUser";
 
 export async function changeUserState(admin: Admin, text: string) {
     const [userId, state] = text.split(" ");
@@ -16,4 +17,5 @@ export async function changeUserState(admin: Admin, text: string) {
     await user.save();
 
     userBot.sendMessage(user.chatId, Texts[`state_to_${state}`], UserKeyboard(user));
+    await findUser(admin, `/find ${user.login}`);
 }
