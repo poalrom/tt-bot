@@ -48,6 +48,9 @@
                     const list = document.createElement('div');
                     list.classList.add('users');
                     users.map((user) => {
+                        if (!user.login) {
+                            return;
+                        }
                         const userNode = document.createElement('div');
                         userNode.textContent = `@${user.login}`;
                         list.appendChild(userNode);
