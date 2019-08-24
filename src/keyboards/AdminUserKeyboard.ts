@@ -8,7 +8,7 @@ import { UserState } from "../types/UserState";
 export function AdminUserKeyboard(admin: Admin, user: User) {
     const keyboard = new InlineKeyboard();
 
-    if (user.state === UserState.FinishedOnline) {
+    if (user.state <= UserState.FinishedOnline) {
         keyboard.addRow({
             text: "Выдать приз за онлайн викторину",
             callback_data: `/changeUserState ${user.chatId} ${UserState.ReceivedOnlineGift}`,
