@@ -68,7 +68,7 @@ export function initAdminBot() {
 
         if (currentRoute) {
             try {
-                return await adminRouter[currentRoute](admin, msg.text);
+                return await adminRouter[currentRoute](admin, admin.currentCommand, msg.text);
             } catch (error) {
                 admin.currentCommand = "";
                 await admin.save();
