@@ -78,9 +78,9 @@ export class User extends BaseEntity {
         if (!user) {
             user = new User();
             user.chatId = msg.from.id;
-            user.login = msg.from.username;
-            user.firstName = msg.from.first_name;
-            user.lastName = msg.from.last_name;
+            user.login = msg.from.username || "";
+            user.firstName = msg.from.first_name || "";
+            user.lastName = msg.from.last_name || "";
             user.last_answer_timestamp = Date.now();
 
             await user.save();
