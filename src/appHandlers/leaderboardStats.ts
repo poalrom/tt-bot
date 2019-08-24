@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
+import { In } from 'typeorm';
 import { User } from "../db/entities/User";
 import { UserState } from "../types/UserState";
 
-export async function tour2(_: Request, res: Response) {
+export async function leaderboardStats(_: Request, res: Response) {
     const users = await User.find({
         isActive: true,
-        state: UserState.MovedToOffline
+        state: In([UserState.MovedToOffline, UserState.MovedToFinal]),
     });
 
     res.json(users);

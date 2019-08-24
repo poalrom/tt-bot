@@ -57,6 +57,9 @@
                     if (typeof defender === 'undefined') {
                         return;
                     }
+                    if (sum === 0) {
+                        return;
+                    }
                     const defenderEl = document.querySelector('.defender');
                     const opponentEl = document.querySelector('.opponent');
                     const defenderPercent = Math.floor(defender / sum * 100);
