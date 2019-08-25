@@ -6,6 +6,7 @@ export async function help(admin: Admin) {
     adminBot.sendMessage(admin.chatId, `
 Доступные команды:
 *${AdminCommands.ANNONCE} {text}* - Отправить текст всем
+*${AdminCommands.CLEAN_ANNONCE} {text}* - Отправить текст всем *без форматирования!*
 *${AdminCommands.FIND} {login}* - Найти участника
 *${AdminCommands.START_DEBATE}* - Начать дебаты
 *${AdminCommands.STOP_DEBATE}* - Закончить текущие дебаты
