@@ -4,4 +4,5 @@ export enum AdminCommands {
     CHANGE_USER_STATE = "/changeUserState",
     START_DEBATE = "/startDebate",
     STOP_DEBATE = "/stopDebate",
+    CLEAN_ANNONCE = "/cleanAnnonce",
 }

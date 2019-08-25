@@ -4,6 +4,7 @@ import { logger } from "./logger";
 
 import { annonce } from "./adminHandlers/annonce";
 import { changeUserState } from "./adminHandlers/changeUserState";
+import { cleanAnnonce } from "./adminHandlers/cleanAnnonce";
 import { AdminCommands } from "./adminHandlers/commands";
 import { findUser } from "./adminHandlers/findUser";
 import { help } from "./adminHandlers/help";
@@ -18,6 +19,7 @@ const adminRouter: IAdminRouter = {
     [AdminCommands.FIND]: findUser,
     [AdminCommands.START_DEBATE]: startDebate,
     [AdminCommands.STOP_DEBATE]: stopDebate,
+    [AdminCommands.CLEAN_ANNONCE]: cleanAnnonce,
 };
 
 const adminCallbackRouter: IAdminRouter = {
